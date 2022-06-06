@@ -90,27 +90,6 @@ mod math {
     }
 }
 
-fn main() {
+fn main() {     
 
 }
-    /* 
-    fn main() {
-        let a = (math::FiniteField::new(33, 97)).unwrap();
-        let b = (math::FiniteField::new(34, 97)).unwrap();
-        println!("{}", &a.equals(&b));
-        println!("{}", &a.equals(&b));
-        let _ = &a.print();
-        let _ = &b.print();
-        let c = &a.add(&b).unwrap();
-        let _ = &c.print();
-        let d = &a.sub(&b).unwrap();
-        let _ = &d.print();
-        let e = &c.mul(&d).unwrap();
-        let _ = &e.print();
-        println!("pase tranqui la multiplicacion");
-        let f = &a.pow(-44);
-        let _ = &f.print();
-        println!("pude pasar las pruebas de potencia");
-        let g = &a.div(&f).unwrap();    
-        let _ = &g.print();
-    } */
