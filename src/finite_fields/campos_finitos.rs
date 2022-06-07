@@ -10,7 +10,7 @@ pub enum OperationError {
     DifferentPrime,
 }
 
-#[derive(Eq, PartialEq, Copy, Clone, Debug)]
+    #[derive(Eq, PartialEq, Copy, Clone, Debug)]
 pub struct FieldElement {
     num: i32,
     prime: i32,
@@ -49,14 +49,7 @@ impl FieldElement {
             prime: self.prime,
         }
     }
-
-    /* pub fn div(&self, other: &Self) -> Result<Self, OperationError> {
-        if self.prime != other.prime {
-            return Err(OperationError::DifferentPrime)
-        }
-        let num: i32 = (self.num * modular_exp(other.num, self.prime - 2, self.prime)).rem_euclid(self.prime);
-        Ok(FieldElement::new(num, self.prime).unwrap())
-    } */
+    
 }
 
 impl Add for FieldElement {
@@ -160,6 +153,6 @@ mod finite_fields_tests {
     fn test_div() {
         let a = FieldElement { num: 3, prime: 31 };
         let b = FieldElement { num: 24, prime: 31 };
-        assert_eq!(a / b, FieldElement{num: 4, prime: 31});
+        assert_eq!(a / b, FieldElement { num: 4, prime: 31 });
     }
 }
