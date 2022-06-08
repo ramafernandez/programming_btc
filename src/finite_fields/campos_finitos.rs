@@ -10,7 +10,7 @@ pub enum OperationError {
     DifferentPrime,
 }
 
-    #[derive(Eq, PartialEq, Copy, Clone, Debug)]
+#[derive(Eq, PartialEq, Copy, Clone, Debug)]
 pub struct FieldElement {
     num: i32,
     prime: i32,
@@ -34,10 +34,7 @@ impl FieldElement {
         }
         match num {
             x if x < 0 => Err(CreationError::NegativeNum),
-            x => Ok(FieldElement {
-                num: x,
-                prime: prime,
-            }),
+            x => Ok(FieldElement { num: x, prime }),
         }
     }
 
@@ -45,11 +42,10 @@ impl FieldElement {
         let n = exp.rem_euclid((self.prime - 1) as i32);
         let num = modular_exp(self.num, n, self.prime);
         FieldElement {
-            num: num,
+            num,
             prime: self.prime,
         }
     }
-    
 }
 
 impl Add for FieldElement {
