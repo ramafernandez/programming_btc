@@ -7,7 +7,7 @@ pub enum CreationError {
 
 use std::f32::INFINITY;
 
-#[derive(Eq, PartialEq, Copy, Clone, Debug)]
+#[derive(PartialEq, Copy, Clone, Debug)]
 pub struct Point {
     a: f32, 
     b: f32, 
@@ -18,9 +18,9 @@ pub struct Point {
 impl Point {
     pub fn new(x: f32, y: f32, a: f32, b: f32) -> Result<Point, CreationError> {
         if y.powf(2.0) != x.powf(3.0) + a * x + b {
-            Err(CreationError::NotInCurve);
+            return Err(CreationError::NotInCurve);
         }
-        Ok(Point{a: a, b: b, x: x, y: y})
+        Ok(Point{a: a, b: b, x, y})
     }
 
 }
@@ -41,14 +41,14 @@ impl Add for Point {
 
 
         //si tienen el mismo x pero distinto y, la suma esta en el infinito (la recta que cruza a ambos no esta en la curva)
-        if self.x == rhs.x && self.y != self.y {
+        if self.x == rhs.x && self.y != rhs.y {
             return Point {a: self.a, b: self.b, x: INFINITY, y: INFINITY}; 
         }
 
         //tienen diferente x
         if self.x != rhs.x {
-            let s = (rhs.y - self.y) / (rhs.x - self.y);
-            let x = s.powf(2.0) - self.x - rhs.x;
+            let s = (rhs.y - self.y) / (rhs.x - self.x);
+            let x = s.powf(2 as f32) - self.x - rhs.x;   
             let y = s * (self.x - x) - self.y;
             return Point {a: self.a, b: self.b, x: x, y: y};
         }
@@ -66,18 +66,40 @@ impl Add for Point {
 
 #[cfg(test)]
 mod point_tests {
+    use std::f32::INFINITY;
+
     use super::Point;
 
     #[test]
     fn test_ne() {
-        let a = Point {a: 5, b: 7, x: 3, y : -7};
-        let b = Point {a: 5, b: 7, x: 18, y : 77};
-        assert_ne(a, b);
-        assert_eq(a, a);
+        let a = Point {a: 5.0, b: 7.0, x: 3.0, y : -7.0};
+        let b = Point {a: 5.0, b: 7.0, x: 18.0, y : 77.0};
+        assert_ne!(a, b);
+        assert_eq!(a, a);
     }
     
-    /* #[test]
-    fn test_add01() {
+    #[test]
+    fn test_add0() {
+        let a = Point {a: 5.0, b: 7.0, x: INFINITY, y : INFINITY};
+        let b = Point {a: 5.0, b: 7.0, x: 2.0, y : 5.0};
+        let c = Point {a: 5.0, b: 7.0, x: 2.0, y : -5.0};
 
-    } */
+        assert_eq!(a + b, b);
+        assert_eq!(b + a, b);
+        assert_eq!(b + c, a);
+    } 
+
+    #[test]
+    fn test_add1() {
+        let a = Point {a: 5.0, b: 7.0, x: 3.0, y : 7.0};
+        let b = Point {a: 5.0, b: 7.0, x: -1.0, y : -1.0};  
+        assert_eq!(a + b, Point {a: 5.0, b: 7.0, x: 2.0, y : -5.0});
+    }
+
+    #[test]
+    fn test_add2() {
+        let a = Point {a: 5.0, b: 7.0, x: -1.0, y : -1.0};
+        assert_eq!(a + a, Point {a: 5.0, b: 7.0, x: 18.0, y : 77.0});        
+    }
+
 }
