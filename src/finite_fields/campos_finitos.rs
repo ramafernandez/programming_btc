@@ -38,6 +38,14 @@ impl FieldElement {
         }
     }
 
+    pub fn num(self) -> i32 {
+        self.num
+    }
+
+    pub fn prime(self) -> i32 {
+        self.prime
+    }
+
     pub fn pow(&self, exp: i32) -> Self {
         let n = exp.rem_euclid((self.prime - 1) as i32);
         let num = modular_exp(self.num, n, self.prime);
@@ -50,7 +58,6 @@ impl FieldElement {
 
 impl Add for FieldElement {
     type Output = FieldElement;
-
     fn add(self, rhs: FieldElement) -> Self::Output {
         assert_eq!(self.prime, rhs.prime);
         FieldElement {
