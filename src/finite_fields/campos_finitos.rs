@@ -16,23 +16,10 @@ pub struct FieldElement {
     prime: i32,
 }
 
-pub fn modular_exp(base: i32, exponent: i32, modulus: i32) -> i32 {
-    if modulus == 0 {
-        return 0;
-    }
-    let mut c = 1;
-    for _ in 0..exponent {
-        c = (c * base).rem_euclid(modulus);
-    }
-    c
-}
-
 impl FieldElement {
     pub fn new(num: i32, prime: i32) -> Result<FieldElement, CreationError> {
-        if num >= prime {
-            return Err(CreationError::BiggerThanPrime);
-        }
         match num {
+            x if x >= prime => Err(CreationError::BiggerThanPrime),
             x if x < 0 => Err(CreationError::NegativeNum),
             x => Ok(FieldElement { num: x, prime }),
         }
@@ -44,6 +31,17 @@ impl FieldElement {
 
     pub fn prime(self) -> i32 {
         self.prime
+    }
+
+    pub fn modular_exp(base: i32, exponent: i32, modulus: i32) -> i32 {
+        if modulus == 0 {
+            return 0;
+        }
+        let mut c = 1;
+        for _ in 0..exponent {
+            c = (c * base).rem_euclid(modulus);
+        }
+        c
     }
 
     pub fn pow(&self, exp: i32) -> Self {

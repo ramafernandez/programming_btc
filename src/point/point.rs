@@ -1,6 +1,6 @@
 use crate::finite_fields::campos_finitos::*;
 use core::panic;
-use std::ops::Add;
+use std::ops::{Add, AddAssign, Mul};
 
 #[derive(PartialEq, Debug)]
 pub enum CreationError {
@@ -143,6 +143,32 @@ impl Add for Point {
     }
 }
 
+/* impl AddAssign for Point {
+    type Output = Point;
+    fn add_assign(&mut self, rhs: Self) {
+
+    }
+} */
+
+impl Mul<Point> for i32 {
+    type Output = Point;
+    fn mul(self, rhs: Point) -> Self::Output {
+        if self == 0 {
+            return Point {
+                a: rhs.a,
+                b: rhs.b,
+                x: None,
+                y: None,
+            };
+        }
+        let mut new: Point = rhs.clone();
+        for _ in 0..self {
+            new = new + new;
+        }
+        new
+    }
+}
+
 #[cfg(test)]
 mod point_tests {
     use super::Point;
@@ -210,5 +236,19 @@ mod point_tests {
         let p2 = Point::new(x2, y2, a, b).unwrap();
         let p3 = Point::new(x3, y3, a, b).unwrap();
         assert_eq!(p1 + p2, p3);
+    }
+
+    #[test]
+    fn test_mul() {
+        let prime = 223;
+        let a = FieldElement::new(0, prime).unwrap();
+        let b = FieldElement::new(7, prime).unwrap();
+        let x1 = Some(FieldElement::new(192, prime).unwrap());
+        let y1 = Some(FieldElement::new(105, prime).unwrap());
+        let x2 = Some(FieldElement::new(49, prime).unwrap());
+        let y2 = Some(FieldElement::new(71, prime).unwrap());
+        let p1 = Point::new(x1, y1, a, b).unwrap();
+        let p2 = Point::new(x2, y2, a, b).unwrap();
+        assert_eq!(2 * p1, p2);
     }
 }
