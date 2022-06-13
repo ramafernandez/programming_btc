@@ -47,7 +47,7 @@ impl FieldElement {
     }
 
     pub fn pow(&self, exp: i32) -> Self {
-        let n = exp.rem_euclid((self.prime - 1) as i32);    
+        let n = exp.rem_euclid((self.prime - 1) as i32);
         let num = modular_exp(self.num, n, self.prime);
         FieldElement {
             num,
