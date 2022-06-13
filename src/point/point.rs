@@ -40,7 +40,9 @@ impl Point {
             Some(num) => {
                 if y.unwrap().num().pow(2) != num.num().pow(3) + a.num() * num.num() + b.num() {
                     Ok(Point { a, b, x, y })
-                } else { Err(CreationError::NotInCurve) }
+                } else {
+                    Err(CreationError::NotInCurve)
+                }
             }
         }
     }
@@ -118,7 +120,7 @@ impl Add for Point {
 
         //tienen diferente x
         if selfx != rhsx {
-            let s = (rhsy - selfy) / (rhsx - selfx);            
+            let s = (rhsy - selfy) / (rhsx - selfx);
             let x = s.pow(2) - selfx - rhsx;
             let y = s * (selfx - x) - selfy;
             return Point {
@@ -159,8 +161,8 @@ impl Add for Point {
 
 #[cfg(test)]
 mod point_tests {
-    use crate::finite_fields::campos_finitos::FieldElement;
     use super::Point;
+    use crate::finite_fields::campos_finitos::FieldElement;
 
     #[test]
     fn test_on_curve() {
@@ -173,7 +175,7 @@ mod point_tests {
     }
 
     #[test]
-    fn test_add() {
+    fn test_add0() {
         let prime = 223;
         let a = FieldElement::new(0, prime).unwrap();
         let b = FieldElement::new(7, prime).unwrap();
@@ -183,7 +185,43 @@ mod point_tests {
         let y2 = Some(FieldElement::new(56, prime).unwrap());
         let x3 = Some(FieldElement::new(170, prime).unwrap());
         let y3 = Some(FieldElement::new(142, prime).unwrap());
-         
+
+        let p1 = Point::new(x1, y1, a, b).unwrap();
+        let p2 = Point::new(x2, y2, a, b).unwrap();
+        let p3 = Point::new(x3, y3, a, b).unwrap();
+        assert_eq!(p1 + p2, p3);
+    }
+
+    #[test]
+    fn test_add1() {
+        let prime = 223;
+        let a = FieldElement::new(0, prime).unwrap();
+        let b = FieldElement::new(7, prime).unwrap();
+        let x1 = Some(FieldElement::new(47, prime).unwrap());
+        let y1 = Some(FieldElement::new(71, prime).unwrap());
+        let x2 = Some(FieldElement::new(117, prime).unwrap());
+        let y2 = Some(FieldElement::new(141, prime).unwrap());
+        let x3 = Some(FieldElement::new(60, prime).unwrap());
+        let y3 = Some(FieldElement::new(139, prime).unwrap());
+
+        let p1 = Point::new(x1, y1, a, b).unwrap();
+        let p2 = Point::new(x2, y2, a, b).unwrap();
+        let p3 = Point::new(x3, y3, a, b).unwrap();
+        assert_eq!(p1 + p2, p3);
+    }
+
+    #[test]
+    fn test_add2() {
+        let prime = 223;
+        let a = FieldElement::new(0, prime).unwrap();
+        let b = FieldElement::new(7, prime).unwrap();
+        let x1 = Some(FieldElement::new(143, prime).unwrap());
+        let y1 = Some(FieldElement::new(98, prime).unwrap());
+        let x2 = Some(FieldElement::new(76, prime).unwrap());
+        let y2 = Some(FieldElement::new(66, prime).unwrap());
+        let x3 = Some(FieldElement::new(47, prime).unwrap());
+        let y3 = Some(FieldElement::new(71, prime).unwrap());
+
         let p1 = Point::new(x1, y1, a, b).unwrap();
         let p2 = Point::new(x2, y2, a, b).unwrap();
         let p3 = Point::new(x3, y3, a, b).unwrap();

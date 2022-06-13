@@ -47,7 +47,7 @@ impl FieldElement {
     }
 
     pub fn pow(&self, exp: i32) -> Self {
-        let n = exp.rem_euclid((self.prime - 1) as i32);
+        let n = exp.rem_euclid((self.prime - 1) as i32);    
         let num = modular_exp(self.num, n, self.prime);
         FieldElement {
             num,
@@ -115,8 +115,8 @@ mod finite_fields_tests {
         let b = FieldElement { num: 2, prime: 31 };
         let c = FieldElement { num: 15, prime: 31 };
         assert_eq!(a, b);
-        assert!(a != c);
-        assert!(!(a != b));
+        assert_ne!(a, c);
+        //assert!(!(a != b));
     }
 
     #[test]
