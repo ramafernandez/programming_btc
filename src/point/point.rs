@@ -1,6 +1,6 @@
 use crate::finite_fields::campos_finitos::*;
 use core::panic;
-use std::ops::{Add, AddAssign, Mul};
+use std::{ops::{Add, AddAssign, Mul}, result};
 
 #[derive(PartialEq, Debug)]
 pub enum CreationError {
@@ -143,13 +143,6 @@ impl Add for Point {
     }
 }
 
-/* impl AddAssign for Point {
-    type Output = Point;
-    fn add_assign(&mut self, rhs: Self) {
-
-    }
-} */
-
 impl Mul<Point> for i32 {
     type Output = Point;
     fn mul(self, rhs: Point) -> Self::Output {
@@ -161,11 +154,17 @@ impl Mul<Point> for i32 {
                 y: None,
             };
         }
-        let mut new: Point = rhs.clone();
-        for _ in 0..self {
-            new = new + new;
+        let mut result: Point = Point { a: rhs.a, b: rhs.b, x: None, y: None };
+        let mut s = self.clone();
+        let mut actual = rhs.clone();
+        while s != 0 {
+            if (s & 1) == true as i32 {
+                result = result + actual;
+            }
+            actual = actual + actual; //ya se, queda implementar el AddAssign
+            s = s >> 1;
         }
-        new
+        result
     }
 }
 

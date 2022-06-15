@@ -1,3 +1,4 @@
+use core::num;
 use std::ops::{Add, Div, Mul, Sub};
 #[derive(PartialEq, Debug)]
 pub enum CreationError {
@@ -46,7 +47,11 @@ impl FieldElement {
 
     pub fn pow(&self, exp: i32) -> Self {
         let n = exp.rem_euclid((self.prime - 1) as i32);
-        let num = modular_exp(self.num, n, self.prime);
+        //let num self.num self.mod_exp(); //modular_exp(self.num, n, self.prime);
+        let mut num = 1;
+        for _ in 0..n {
+            num = (num * self.num).rem_euclid(self.prime);
+        }
         FieldElement {
             num,
             prime: self.prime,
@@ -94,15 +99,11 @@ impl Div for FieldElement {
 
     fn div(self, rhs: FieldElement) -> Self::Output {
         assert_eq!(self.prime, rhs.prime);
-        assert_ne!(rhs.num, 0);
-        FieldElement {
-            num: (self.num * modular_exp(rhs.num, self.prime - 2, self.prime))
-                .rem_euclid(self.prime),
-            prime: self.prime,
-        }
+        assert_ne!(rhs.num, 0, "can't divide by 0");
+        self.clone() * rhs.pow(self.prime - 2)
     }
 }
-
+/* modular_exp(rhs.num, self.prime - 2, self.prime) */
 #[cfg(test)]
 mod finite_fields_tests {
     use super::FieldElement;
@@ -114,7 +115,6 @@ mod finite_fields_tests {
         let c = FieldElement { num: 15, prime: 31 };
         assert_eq!(a, b);
         assert_ne!(a, c);
-        //assert!(!(a != b));
     }
 
     #[test]
