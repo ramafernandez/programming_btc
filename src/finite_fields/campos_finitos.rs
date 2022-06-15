@@ -1,4 +1,3 @@
-use core::num;
 use std::ops::{Add, Div, Mul, Sub};
 #[derive(PartialEq, Debug)]
 pub enum CreationError {
@@ -47,7 +46,6 @@ impl FieldElement {
 
     pub fn pow(&self, exp: i32) -> Self {
         let n = exp.rem_euclid((self.prime - 1) as i32);
-        //let num self.num self.mod_exp(); //modular_exp(self.num, n, self.prime);
         let mut num = 1;
         for _ in 0..n {
             num = (num * self.num).rem_euclid(self.prime);
@@ -103,7 +101,7 @@ impl Div for FieldElement {
         self.clone() * rhs.pow(self.prime - 2)
     }
 }
-/* modular_exp(rhs.num, self.prime - 2, self.prime) */
+
 #[cfg(test)]
 mod finite_fields_tests {
     use super::FieldElement;

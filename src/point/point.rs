@@ -1,6 +1,9 @@
 use crate::finite_fields::campos_finitos::*;
 use core::panic;
-use std::{ops::{Add, AddAssign, Mul}, result};
+use std::{
+    ops::{Add, AddAssign, Mul},
+    result,
+};
 
 #[derive(PartialEq, Debug)]
 pub enum CreationError {
@@ -154,7 +157,12 @@ impl Mul<Point> for i32 {
                 y: None,
             };
         }
-        let mut result: Point = Point { a: rhs.a, b: rhs.b, x: None, y: None };
+        let mut result: Point = Point {
+            a: rhs.a,
+            b: rhs.b,
+            x: None,
+            y: None,
+        };
         let mut s = self.clone();
         let mut actual = rhs.clone();
         while s != 0 {
@@ -238,7 +246,7 @@ mod point_tests {
     }
 
     #[test]
-    fn test_mul() {
+    fn test_mul0() {
         let prime = 223;
         let a = FieldElement::new(0, prime).unwrap();
         let b = FieldElement::new(7, prime).unwrap();
@@ -249,5 +257,19 @@ mod point_tests {
         let p1 = Point::new(x1, y1, a, b).unwrap();
         let p2 = Point::new(x2, y2, a, b).unwrap();
         assert_eq!(2 * p1, p2);
+    }
+
+    #[test]
+    fn test_mul1() {
+        let prime = 223;
+        let a = FieldElement::new(0, prime).unwrap();
+        let b = FieldElement::new(7, prime).unwrap();
+        let x1 = Some(FieldElement::new(47, prime).unwrap());
+        let y1 = Some(FieldElement::new(71, prime).unwrap());
+        let x2 = Some(FieldElement::new(116, prime).unwrap());
+        let y2 = Some(FieldElement::new(55, prime).unwrap());
+        let p1 = Point::new(x1, y1, a, b).unwrap();
+        let p2 = Point::new(x2, y2, a, b).unwrap();
+        assert_eq!(8 * p1, p2);
     }
 }
