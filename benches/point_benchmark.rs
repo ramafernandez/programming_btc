@@ -12,7 +12,6 @@ fn operaciones_punto() {
 
     let p1 = Point::new(x1, y1, a, b).unwrap();
     let p2 = Point::new(x2, y2, a, b).unwrap();
-
     let p3: Point = p1 + p2;
 
     let a = FieldElement::new(0, prime).unwrap();
